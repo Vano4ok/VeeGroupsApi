@@ -21,6 +21,7 @@ namespace TelegramBotService
                new EnterGroupKeyBoard(),
                new StandInLineInlineKeyBoard(),
                new ConfirmInlineKeyBoard(),
+               new UnConfirmInlineKeyBoard(),
                new TopicSettingsInlineKeyBoard(),
                new DeleteTopicinlineKeyBoard(),
                new GroupSettingsInlineKeyBoard(),

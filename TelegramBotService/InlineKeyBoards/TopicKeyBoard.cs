@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,33 +9,24 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using TelegramBotService.InlineKeyboardMethods;
 
 namespace TelegramBotService.InlineKeyBoards
 {
     public class TopicKeyBoard : IInlineKeyBoard
     {
         public string Name => "Topic";
+        
+        protected Topic topic;
+        protected Guid topicId;
+        protected bool isAdmin;
+        protected DataBaseContext db;
+        protected List<UserInTopic> users;
 
-        public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
-        {
-            var topicId = new Guid(callbackQuery.Data.Split('_')[1]);
-
-            var topic = await db.Topics
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Id == topicId);
-
-            if (topic == null)
-            {
-                await client.EditMessageTextAsync(callbackQuery.From.Id, callbackQuery.Message.MessageId, "This topic is deleted");
-                return;
-            }
-
-            var isAdmin = await telegramAuthorizationManager.IsAdmin(callbackQuery.From.Id, topic.GroupId, db);
-
-            List<InlineKeyboardButton[]> list = new List<InlineKeyboardButton[]>();
-
-            var users = await db.TelegramUserGroups.Where(x => x.GroupId.Equals(topic.GroupId))
-                .Join(db.TelegramUserTopics, u => u.TelegramUserId, c => c.TelegramUserId, (u, c) => new
+        /// <summury>Ment update users list and omit stupid errors</summury>
+        protected async Task UpdateUsers(){
+            users = await db.TelegramUserGroups.Where(x => x.GroupId.Equals(topic.GroupId))
+                .Join(db.TelegramUserTopics, u => u.TelegramUserId, c => c.TelegramUserId, (u, c) => new UserInTopic
                 {
                     TopicId = c.TopicId,
                     UserId = u.TelegramUserId,
@@ -45,83 +37,41 @@ namespace TelegramBotService.InlineKeyBoards
                 .Where(x => x.TopicId.Equals(topic.Id))
                 .OrderBy(u => u.Date)
                 .ToListAsync();
+        }
 
-            string messageText = "Welcome to " + topic.Name + "\nUsers in line:\n";
+        protected async Task Initialize(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager){
+            topicId = new Guid(callbackQuery.Data.Split('_')[1]);
 
-            foreach (var user in users)
+            topic = await db.Topics
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == topicId);
+
+            if (topic == null)
             {
-                if (user.IsConfirm)
-                    messageText += "\U00002705  ";
-                messageText += user.Name + "\n";
+                await client.EditMessageTextAsync(callbackQuery.From.Id, callbackQuery.Message.MessageId, "This topic is deleted");
+                throw new Exception($"Topic {topicId} was not found");
             }
 
-            if (!users
-                .Any(u => u.TopicId.Equals(topicId)
-                && u.UserId.Equals(callbackQuery.From.Id)))
-            {
-                list.Add(
-                    new InlineKeyboardButton[]
-                    {
-                        new InlineKeyboardButton()
-                        {
-                            Text ="\U000027A1 Stand in line",
-                            CallbackData ="StandInLine_"+ topic.Id
-                        }
-                    });
-            }
-            else if (users != null)
-            {
-                var confirmUser = users.FirstOrDefault(x => x.IsConfirm == false);
+            isAdmin = await telegramAuthorizationManager.IsAdmin(callbackQuery.From.Id, topic.GroupId, db);
 
-                if (confirmUser == null)
-                {
-                    if (callbackQuery.From.Id == users.ElementAt(0).UserId && users.ElementAt(0).IsConfirm == false)
-                        list.Add(
-                            new InlineKeyboardButton[]
-                            {
-                                    new InlineKeyboardButton()
-                                    {
-                                        Text ="\U00002705 Confirm",
-                                        CallbackData ="Confirm_"+ topic.Id
-                                    }
-                            });
-                }
-                else if (confirmUser.UserId == callbackQuery.From.Id)
-                {
-                    list.Add(
-                           new InlineKeyboardButton[]
-                           {
-                                    new InlineKeyboardButton()
-                                    {
-                                        Text ="\U00002705 Confirm",
-                                        CallbackData ="Confirm_"+ topic.Id
-                                    }
-                           });
-                }
-            }
+            this.db = db;
+            await UpdateUsers();
+        }
 
-            if (isAdmin)
-                list.Add(
-                    new InlineKeyboardButton[]
-                    {
-                        new InlineKeyboardButton()
-                        {
-                            Text = "\U00002699 Settings",
-                            CallbackData = "TopicSettings_"+ topic.Id
-                        }
-                    });
+        public virtual async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
+        {
+            await Initialize(callbackQuery, client, db, telegramAuthorizationManager);
+            await FinishExecution(callbackQuery, client, db, telegramAuthorizationManager);
+        }
 
-            list.Add(
-                new InlineKeyboardButton[]
-                {
-                    new InlineKeyboardButton()
-                    {
-                        Text = "\U000021A9 Back",
-                        CallbackData = "ListOfTopics_"+topic.GroupId
-                    }
-                });
+        protected async Task FinishExecution(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager){
+            string messageText = $"Welcome to {topic.Name}\n";
+            UpdateUsers();
+            messageText += UserInTopic.GenerateUserList(users);
 
-            InlineKeyboardMarkup inline = new InlineKeyboardMarkup(list);
+            List<InlineKeyboardButton[]> keyboardList = new List<InlineKeyboardButton[]>();
+            SpawnTopicKeyboard.Generate(ref keyboardList, users, topic, callbackQuery, isAdmin);
+            InlineKeyboardMarkup inline = new InlineKeyboardMarkup(keyboardList);
 
             await client.EditMessageTextAsync(callbackQuery.From.Id, callbackQuery.Message.MessageId, messageText, replyMarkup: inline);
         }
