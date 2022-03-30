@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog;
+using Microsoft.Extensions.Logging;
+// using NLog;
 using System.IO;
 using TelegramBotService;
 using VeeGroupsApi.ActionFilters;
@@ -19,7 +20,7 @@ namespace VeeGroupsApi
     {
         public Startup(IConfiguration configuration)
         {
-            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config.xml"));
+            // LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config.xml"));
 
             Configuration = configuration;
         }
@@ -32,7 +33,13 @@ namespace VeeGroupsApi
 
             services.ConfigureIISIntegration();
 
-            services.AddScoped<ILoggerManager, LoggerManager>();
+            // services.AddScoped<ILoggerManager, LoggerManager>();
+            
+            services.AddLogging(logging =>
+            {
+                logging.AddConsole();
+                logging.AddDebug();
+            });
 
             services.AddScoped<IStateService, StateService>();
 
@@ -40,7 +47,7 @@ namespace VeeGroupsApi
 
             services.AddScoped<ITelegramAuthorizationManager, TelegramAuthorizationManager>();
 
-            services.AddScoped<ValidationFilterAttribute>();
+            // services.AddScoped<ValidationFilterAttribute>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -60,14 +67,14 @@ namespace VeeGroupsApi
             services.AddTelegramBotClient(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env/*, ILoggerManager logger*/)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.ConfigureExceptionHandler(logger);
+            // app.ConfigureExceptionHandler(logger);
 
             app.UseCors("CorsPolicy");
 

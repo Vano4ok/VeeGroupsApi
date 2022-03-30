@@ -3,6 +3,8 @@ using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -20,11 +22,13 @@ namespace VeeGroupsApi.Controllers
         private readonly IInlineKeyBoardService inlineKeyBoardService;
         private readonly ITelegramAuthorizationManager telegramAuthorizationManager;
         private readonly DataBaseContext db;
+        private readonly ILogger loginSpy; 
 
-        public BotController(DataBaseContext db, ITelegramBotClient telegramBotClient, ILoggerManager loggerManager, IStateService stateService, IInlineKeyBoardService inlineKeyBoardService, ITelegramAuthorizationManager telegramAuthorizationManager)
+        public BotController(DataBaseContext db, ILogger<BotController> loginSpy, ITelegramBotClient telegramBotClient/*, ILoggerManager loggerManager*/, IStateService stateService, IInlineKeyBoardService inlineKeyBoardService, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
+            this.loginSpy = loginSpy;
             this.telegramBotClient = telegramBotClient;
-            this.loggerManager = loggerManager;
+            // this.loggerManager = loggerManager;
             this.stateService = stateService;
             this.inlineKeyBoardService = inlineKeyBoardService;
             this.telegramAuthorizationManager = telegramAuthorizationManager;
@@ -40,10 +44,11 @@ namespace VeeGroupsApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Update update)
         {
-
             try
             {
                 if (update == null) return Ok();
+
+                loginSpy.LogDebug("Got a request!!");
 
                 Message message = update.Message;
 
@@ -92,27 +97,27 @@ namespace VeeGroupsApi.Controllers
                     {
                         InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup(
 
-                new InlineKeyboardButton[][] {
-                new InlineKeyboardButton[]
-                {
-                    new InlineKeyboardButton()
-                    {
-                        Text = "\U0001F4C1 Your groups",
-                        CallbackData = "ListOfGroups"
-                    }
-                }, new InlineKeyboardButton[]
-                {
-                    new InlineKeyboardButton()
-                    {
-                        Text = "\U000027A1 Enter the group",
-                        CallbackData = "EnterGroup"
-                    },
-                    new InlineKeyboardButton()
-                    {
-                        Text = "\U0001FA84 Create a new group",
-                        CallbackData = "CreationGroup"
-                    }
-                }});
+                            new InlineKeyboardButton[][] {
+                            new InlineKeyboardButton[]
+                            {
+                                new InlineKeyboardButton()
+                                {
+                                    Text = "\U0001F4C1 Your groups",
+                                    CallbackData = "ListOfGroups"
+                                }
+                            }, new InlineKeyboardButton[]
+                            {
+                                new InlineKeyboardButton()
+                                {
+                                    Text = "\U000027A1 Enter the group",
+                                    CallbackData = "EnterGroup"
+                                },
+                                new InlineKeyboardButton()
+                                {
+                                    Text = "\U0001FA84 Create a new group",
+                                    CallbackData = "CreationGroup"
+                                }
+                            }});
 
                         await telegramBotClient.SendTextMessageAsync(message.Chat.Id, "Hello! I am VeeGroups Bot", replyMarkup: inlineKeyboard);
 
@@ -133,8 +138,9 @@ namespace VeeGroupsApi.Controllers
 
                 return Ok();
             }
-            catch
+            catch (Exception e)
             {
+                loginSpy.LogError($"BotController error: { e.Message }  { e.ToString()}");
                 return Ok();
             }
         }

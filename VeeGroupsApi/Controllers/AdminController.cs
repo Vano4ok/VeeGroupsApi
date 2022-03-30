@@ -2,11 +2,15 @@
 
 namespace VeeGroupsApi.Controllers
 {
+    [Route("/{action = Index}")]
     public class AdminController : Controller
     {
         public IActionResult Index()
         {
-            return View();
+            return base.Content("Service is working");
+        }
+        public string Admin(){
+            return "admin page is in the development, or will be soon :]";
         }
     }
 }
