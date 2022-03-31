@@ -2,7 +2,7 @@
 
 
 ## TODO list:
-- [ ] ability to get out of queue
+- [x] ability to get out of queue
 - [ ] skip person on queue
 - [ ] delete person by admin
 - [ ] add delete admin of queue
@@ -15,3 +15,6 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<password>" \
    -v  $PWD/DBBackup/mssql:/var/opt/mssql \
    -d mcr.microsoft.com/mssql/server:2019-latest
 ```
+
+### Last updates:
+- added docker-compose file

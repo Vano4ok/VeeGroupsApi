@@ -49,7 +49,7 @@ namespace TelegramBotService.InlineKeyboardMethods
                         });
                 }
 
-                else if( users.FirstOrDefault( x => x.UserId == callbackQuery.From.Id ) != null ){
+                else if( users.FirstOrDefault( x => x.UserId == callbackQuery.From.Id && !x.IsConfirm ) != null ){
                     keyboardList.Add( new InlineKeyboardButton[] { key });
                 }
             }

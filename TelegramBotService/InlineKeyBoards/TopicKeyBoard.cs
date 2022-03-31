@@ -66,7 +66,7 @@ namespace TelegramBotService.InlineKeyBoards
 
         protected async Task FinishExecution(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager){
             string messageText = $"Welcome to {topic.Name}\n";
-            UpdateUsers();
+            await UpdateUsers();
             messageText += UserInTopic.GenerateUserList(users);
 
             List<InlineKeyboardButton[]> keyboardList = new List<InlineKeyboardButton[]>();

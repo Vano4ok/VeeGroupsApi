@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  telegram_bot:
+    image: "vee_group_bot:latest"
+    container_name: "sad_habit"
+    ports: 
+      - "88:80"
+    volumes:
+       - "/root/appsettings.json:/app/appsettings.json"
+  sql_database:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    container_name: "sqlio_permanento"
+    ports:
+      - 1433:1433
+    volumes:
+      - "$PWD/DBBackup/mssql:/var/opt/mssql"
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "SA_PASSWORD=<password>"
+
+networks:
+  default:
+    name: VeeGroupBotNetwork
