@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,8 +16,8 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class TopicKeyBoard : IInlineKeyBoard
     {
-        public string Name => "Topic";
-        
+        public string Name => InlineKeyBoardsConstants.StartMenu;
+
         protected Topic topic;
         protected Guid topicId;
         protected bool isAdmin;
@@ -24,7 +25,8 @@ namespace TelegramBotService.InlineKeyBoards
         protected List<UserInTopic> users;
 
         /// <summury>Ment update users list and omit stupid errors</summury>
-        protected async Task UpdateUsers(){
+        protected async Task UpdateUsers()
+        {
             users = await db.TelegramUserGroups.Where(x => x.GroupId.Equals(topic.GroupId))
                 .Join(db.TelegramUserTopics, u => u.TelegramUserId, c => c.TelegramUserId, (u, c) => new UserInTopic
                 {
@@ -39,7 +41,8 @@ namespace TelegramBotService.InlineKeyBoards
                 .ToListAsync();
         }
 
-        protected async Task Initialize(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager){
+        protected async Task Initialize(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
+        {
             topicId = new Guid(callbackQuery.Data.Split('_')[1]);
 
             topic = await db.Topics
@@ -64,7 +67,8 @@ namespace TelegramBotService.InlineKeyBoards
             await FinishExecution(callbackQuery, client, db, telegramAuthorizationManager);
         }
 
-        protected async Task FinishExecution(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager){
+        protected async Task FinishExecution(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
+        {
             string messageText = $"Welcome to {topic.Name}\n";
             await UpdateUsers();
             messageText += UserInTopic.GenerateUserList(users);

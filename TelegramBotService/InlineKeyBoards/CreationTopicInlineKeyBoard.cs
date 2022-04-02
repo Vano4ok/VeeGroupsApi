@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class CreationTopicInlineKeyBoard : IInlineKeyBoard
     {
-        public string Name => "CreateTopic";
+        public string Name => InlineKeyBoardsConstants.CreateTopic;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -36,7 +37,7 @@ namespace TelegramBotService.InlineKeyBoards
 
             await client.SendTextMessageAsync(callbackQuery.From.Id, "Enter topic's name", replyMarkup: keyboard);
 
-            user.State = "CreationTopic";
+            user.State = StateConstants.CreationTopic;
 
             await db.SaveChangesAsync();
         }

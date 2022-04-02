@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace TelegramBotService.States
 {
     public class EnterUserNameForMemberState : IUserState
     {
-        public string Name => "EnterUserNameForMember";
+        public string Name => StateConstants.EnterUserNameForMember;
 
         public async Task<string> Execute(Message message, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -21,7 +22,7 @@ namespace TelegramBotService.States
             {
                 Message msg = await client.SendTextMessageAsync(message.From.Id, ".", replyMarkup: new ReplyKeyboardRemove());
                 await client.DeleteMessageAsync(message.From.Id, msg.MessageId);
-                return "StandartState";
+                return StateConstants.StandartState;
             }
 
             if (message.Text.Length > 40)
@@ -63,7 +64,7 @@ namespace TelegramBotService.States
                 InlineKeyboardButton button = new InlineKeyboardButton()
                 {
                     Text = topic.Name,
-                    CallbackData = "Topic_" + topic.Id,
+                    CallbackData = InlineKeyBoardsConstants.Topic + "_" + topic.Id,
                 };
                 InlineKeyboardButton[] row = new InlineKeyboardButton[1]
                 {
@@ -75,7 +76,7 @@ namespace TelegramBotService.States
             InlineKeyboardButton backButton = new InlineKeyboardButton()
             {
                 Text = "Back",
-                CallbackData = "ListOfGroups"
+                CallbackData = InlineKeyBoardsConstants.ListOfGroups
             };
             InlineKeyboardButton[] lastRow = new InlineKeyboardButton[1]
             {
@@ -87,7 +88,7 @@ namespace TelegramBotService.States
 
             await client.SendTextMessageAsync(message.From.Id, "Welcome to " + group.Name, replyMarkup: inline);
 
-            return "StandartState";
+            return StateConstants.StandartState;
         }
     }
 }

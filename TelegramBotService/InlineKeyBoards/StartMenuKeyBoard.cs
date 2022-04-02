@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -9,7 +10,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class StartMenuKeyBoard : IInlineKeyBoard
     {
-        public string Name => "StartMenu";
+        public string Name => InlineKeyBoardsConstants.StartMenu;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -21,19 +22,19 @@ namespace TelegramBotService.InlineKeyBoards
                     new InlineKeyboardButton()
                     {
                         Text = "\U0001F4C1 Your groups",
-                        CallbackData = "ListOfGroups"
+                        CallbackData = InlineKeyBoardsConstants.ListOfGroups
                     }
                 }, new InlineKeyboardButton[]
                 {
                     new InlineKeyboardButton()
                     {
                         Text = "\U000027A1 Enter the group",
-                        CallbackData = "EnterGroup"
+                        CallbackData = InlineKeyBoardsConstants.EnterGroup
                     },
                     new InlineKeyboardButton()
                     {
                         Text = "\U0001FA84 Create a new group",
-                        CallbackData = "CreationGroup"
+                        CallbackData = InlineKeyBoardsConstants.CreationGroup
                     }
                 }});
 

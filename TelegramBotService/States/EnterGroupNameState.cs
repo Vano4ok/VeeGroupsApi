@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -10,7 +11,7 @@ namespace TelegramBotService.States
 {
     class EnterGroupNameState : IUserState
     {
-        public string Name => "CreationGroup";
+        public string Name => StateConstants.CreationGroup;
 
         public async Task<string> Execute(Message message, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -18,7 +19,7 @@ namespace TelegramBotService.States
             {
                 Message msg = await client.SendTextMessageAsync(message.From.Id, ".", replyMarkup: new ReplyKeyboardRemove());
                 await client.DeleteMessageAsync(message.From.Id, msg.MessageId);
-                return "StandartState";
+                return StateConstants.StandartState;
             }
 
             if (message.Text.Length > 30)
@@ -40,7 +41,7 @@ namespace TelegramBotService.States
 
             await client.SendTextMessageAsync(message.From.Id, "Good job! Enter your name");
 
-            return "EnterName";
+            return StateConstants.EnterName;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class ListOfTopicsKeyBoard : IInlineKeyBoard
     {
-        public string Name => "ListOfTopics";
+        public string Name => InlineKeyBoardsConstants.ListOfTopics;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -39,7 +40,7 @@ namespace TelegramBotService.InlineKeyBoards
                 InlineKeyboardButton button = new InlineKeyboardButton()
                 {
                     Text = topic.Name,
-                    CallbackData = "Topic_" + topic.Id,
+                    CallbackData = InlineKeyBoardsConstants.Topic + "_" + topic.Id,
                 };
                 InlineKeyboardButton[] row = new InlineKeyboardButton[1]
                 {
@@ -58,7 +59,7 @@ namespace TelegramBotService.InlineKeyBoards
                     new InlineKeyboardButton()
                     {
                         Text = "\U0001F4AC Send message",
-                        CallbackData = "SendMessage_" + groupId
+                        CallbackData = InlineKeyBoardsConstants.SendMessage+ "_" + groupId
                     }
                };
 
@@ -69,12 +70,12 @@ namespace TelegramBotService.InlineKeyBoards
                     new InlineKeyboardButton()
                     {
                         Text = "\U0001FA84 Create new topic",
-                        CallbackData = "CreateTopic_" + groupId
+                        CallbackData = InlineKeyBoardsConstants.CreateTopic+ "_" + groupId
                     },
                     new InlineKeyboardButton()
                     {
                         Text = "\U00002699 Settings",
-                        CallbackData = "GroupSettings_"+ groupId
+                        CallbackData = InlineKeyBoardsConstants.GroupSettings + "_"+ groupId
                     }
                 };
 
@@ -84,7 +85,7 @@ namespace TelegramBotService.InlineKeyBoards
             InlineKeyboardButton backButton = new InlineKeyboardButton()
             {
                 Text = "\U000021A9 Back",
-                CallbackData = "ListOfGroups"
+                CallbackData = InlineKeyBoardsConstants.ListOfGroups
             };
             InlineKeyboardButton[] lastRow = new InlineKeyboardButton[1]
             {

@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -10,7 +11,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class EnterGroupKeyBoard : IInlineKeyBoard
     {
-        public string Name => "EnterGroup";
+        public string Name => InlineKeyBoardsConstants.EnterGroup;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -31,7 +32,7 @@ namespace TelegramBotService.InlineKeyBoards
 
             var telegramUser = await db.TelegramUsers.FirstOrDefaultAsync(u => u.TelegramUserId == callbackQuery.From.Id);
 
-            telegramUser.State = "EnteringGroup";
+            telegramUser.State = StateConstants.EnteringGroup;
 
             await db.SaveChangesAsync();
         }

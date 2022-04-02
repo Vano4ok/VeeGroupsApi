@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class GroupSettingsInlineKeyBoard : IInlineKeyBoard
     {
-        public string Name => "GroupSettings";
+        public string Name => InlineKeyBoardsConstants.EnterGroup;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -36,12 +37,12 @@ namespace TelegramBotService.InlineKeyBoards
                     new InlineKeyboardButton()
                     {
                         Text = "\U00002328 Show invite code",
-                        CallbackData = "ShowInviteCode_"+group.Id
+                        CallbackData = InlineKeyBoardsConstants.ShowInviteCode+ "_"+group.Id
                     },
                     new InlineKeyboardButton()
                     {
                         Text = "\U0001F504 Refresh invite code",
-                        CallbackData = "RefreshInviteCode_"+group.Id
+                        CallbackData = InlineKeyBoardsConstants.RefreshInviteCode+ "_"+group.Id
                     }
                 },
                 new InlineKeyboardButton[]
@@ -49,12 +50,12 @@ namespace TelegramBotService.InlineKeyBoards
                     new InlineKeyboardButton()
                     {
                         Text = "\U0001F9E8 Delete group",
-                        CallbackData = "DeleteGroup_"+group.Id
+                        CallbackData = InlineKeyBoardsConstants.DeleteGroup+ "_"+group.Id
                     },
                     new InlineKeyboardButton()
                     {
                         Text = "\U000021A9 Back",
-                        CallbackData = "ListOfTopics_"+group.Id
+                        CallbackData = InlineKeyBoardsConstants.ListOfTopics+ "_"+group.Id
                     }
                 }});
 

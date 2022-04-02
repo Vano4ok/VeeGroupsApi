@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class TopicSettingsInlineKeyBoard : IInlineKeyBoard
     {
-        public string Name => "TopicSettings";
+        public string Name => InlineKeyBoardsConstants.StartMenu;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -35,12 +36,12 @@ namespace TelegramBotService.InlineKeyBoards
                     new InlineKeyboardButton()
                     {
                         Text = "\U0001F9E8 Delete topic",
-                        CallbackData = "DeleteTopic_"+topic.Id
+                        CallbackData = InlineKeyBoardsConstants.DeleteTopic+ "_"+topic.Id
                     },
                     new InlineKeyboardButton()
                     {
                         Text = "\U000021A9 Back",
-                        CallbackData = "Topic_"+topic.Id
+                        CallbackData = InlineKeyBoardsConstants.Topic+ "_"+topic.Id
                     }
                 }});
 

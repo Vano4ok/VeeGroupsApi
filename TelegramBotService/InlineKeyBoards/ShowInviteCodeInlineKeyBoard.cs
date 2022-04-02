@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class ShowInviteCodeInlineKeyBoard : IInlineKeyBoard
     {
-        public string Name => "ShowInviteCode";
+        public string Name => InlineKeyBoardsConstants.ShowInviteCode;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {

@@ -1,5 +1,4 @@
 using Contracts;
-using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -9,9 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 // using NLog;
-using System.IO;
 using TelegramBotService;
-using VeeGroupsApi.ActionFilters;
 using VeeGroupsApi.Extensions;
 
 namespace VeeGroupsApi
@@ -34,7 +31,7 @@ namespace VeeGroupsApi
             services.ConfigureIISIntegration();
 
             // services.AddScoped<ILoggerManager, LoggerManager>();
-            
+
             services.AddLogging(logging =>
             {
                 logging.AddConsole();

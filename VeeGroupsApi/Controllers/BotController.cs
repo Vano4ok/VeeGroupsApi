@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace VeeGroupsApi.Controllers
         private readonly IInlineKeyBoardService inlineKeyBoardService;
         private readonly ITelegramAuthorizationManager telegramAuthorizationManager;
         private readonly DataBaseContext db;
-        private readonly ILogger loginSpy; 
+        private readonly ILogger loginSpy;
 
         public BotController(DataBaseContext db, ILogger<BotController> loginSpy, ITelegramBotClient telegramBotClient/*, ILoggerManager loggerManager*/, IStateService stateService, IInlineKeyBoardService inlineKeyBoardService, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -69,7 +70,7 @@ namespace VeeGroupsApi.Controllers
                     TelegramUser newUser = new TelegramUser()
                     {
                         TelegramUserId = message.From.Id,
-                        State = "StandartState"
+                        State = StateConstants.StandartState
                     };
 
                     await db.TelegramUsers.AddAsync(newUser);
@@ -79,7 +80,7 @@ namespace VeeGroupsApi.Controllers
                 }
 
                 if (callBack != null)
-                    if (telegramUser.State == "StandartState")
+                    if (telegramUser.State == StateConstants.StandartState)
                     {
                         foreach (var inlineKeyBoard in inlineKeyBoardService.Get())
                         {
@@ -103,19 +104,19 @@ namespace VeeGroupsApi.Controllers
                                 new InlineKeyboardButton()
                                 {
                                     Text = "\U0001F4C1 Your groups",
-                                    CallbackData = "ListOfGroups"
+                                    CallbackData = InlineKeyBoardsConstants.ListOfGroups
                                 }
                             }, new InlineKeyboardButton[]
                             {
                                 new InlineKeyboardButton()
                                 {
                                     Text = "\U000027A1 Enter the group",
-                                    CallbackData = "EnterGroup"
+                                    CallbackData = InlineKeyBoardsConstants.EnterGroup
                                 },
                                 new InlineKeyboardButton()
                                 {
                                     Text = "\U0001FA84 Create a new group",
-                                    CallbackData = "CreationGroup"
+                                    CallbackData = InlineKeyBoardsConstants.CreationGroup
                                 }
                             }});
 
@@ -127,7 +128,7 @@ namespace VeeGroupsApi.Controllers
                 if (message != null)
                     foreach (var state in stateService.Get())
                     {
-                        if (state.Name == telegramUser.State && state.Name != "StandartState")
+                        if (state.Name == telegramUser.State && state.Name != StateConstants.StandartState)
                         {
                             telegramUser.State = await state.Execute(message, telegramBotClient, db, telegramAuthorizationManager);
                             await db.SaveChangesAsync();

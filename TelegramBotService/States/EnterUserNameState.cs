@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,7 +14,7 @@ namespace TelegramBotService.States
 {
     class EnterUserNameState : IUserState
     {
-        public string Name => "EnterName";
+        public string Name => StateConstants.EnterName;
 
         public async Task<string> Execute(Message message, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -21,7 +22,7 @@ namespace TelegramBotService.States
             {
                 Message msg = await client.SendTextMessageAsync(message.From.Id, ".", replyMarkup: new ReplyKeyboardRemove());
                 await client.DeleteMessageAsync(message.From.Id, msg.MessageId);
-                return "StandartState";
+                return StateConstants.StandartState;
             }
 
             if (message.Text.Length > 40)
@@ -66,7 +67,7 @@ namespace TelegramBotService.States
                         new InlineKeyboardButton()
                         {
                              Text = "\U0001F4AC Send message",
-                             CallbackData = "SendMessage_" + group.Id
+                             CallbackData = InlineKeyBoardsConstants.SendMessage+ "_" + group.Id
                         }
 
                     },
@@ -75,12 +76,12 @@ namespace TelegramBotService.States
                         new InlineKeyboardButton()
                         {
                             Text = "\U0001FA84 Create new topic",
-                            CallbackData = "CreateTopic_" + group.Id.ToString()
+                            CallbackData = InlineKeyBoardsConstants.CreateTopic+ "_" + group.Id.ToString()
                         },
                     new InlineKeyboardButton()
                         {
                             Text = "\U00002699 Settings",
-                            CallbackData = "GroupSettings_"+ group.Id.ToString()
+                            CallbackData = InlineKeyBoardsConstants.GroupSettings + "_"+ group.Id.ToString()
                         }
                     },
                     new InlineKeyboardButton[]
@@ -88,14 +89,14 @@ namespace TelegramBotService.States
                         new InlineKeyboardButton()
                         {
                             Text = "\U000021A9 Back",
-                            CallbackData = "StartMenu"
+                            CallbackData = InlineKeyBoardsConstants.StartMenu
                         }
                     }
                 });
 
             await client.SendTextMessageAsync(message.From.Id, "Wellcome to " + group.Name + "! \nIt is invite code of your group:\n" + group.InviteCode, replyMarkup: inlineKeyboard);
 
-            return "StandartState";
+            return StateConstants.StandartState;
         }
     }
 }

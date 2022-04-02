@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace TelegramBotService.States
 {
     public class WriteGroupMessageState : IUserState
     {
-        public string Name => "EnterGroupMessage";
+        public string Name => StateConstants.EnterGroupMessage;
 
         public async Task<string> Execute(Message message, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -20,7 +21,7 @@ namespace TelegramBotService.States
             {
                 Message msg = await client.SendTextMessageAsync(message.From.Id, ".", replyMarkup: new ReplyKeyboardRemove());
                 await client.DeleteMessageAsync(message.From.Id, msg.MessageId);
-                return "StandartState";
+                return StateConstants.StandartState;
             }
 
             Message msg1 = await client.SendTextMessageAsync(message.From.Id, ".", replyMarkup: new ReplyKeyboardRemove());
@@ -49,7 +50,7 @@ namespace TelegramBotService.States
 
             await client.SendTextMessageAsync(telegramUser.TelegramUserId, "The message was sent to all members of the group!");
 
-            return "StandartState";
+            return StateConstants.StandartState;
         }
     }
 }

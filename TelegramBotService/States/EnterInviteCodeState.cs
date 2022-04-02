@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -10,7 +11,7 @@ namespace TelegramBotService.States
 {
     public class EnterInviteCodeState : IUserState
     {
-        public string Name => "EnteringGroup";
+        public string Name => StateConstants.EnteringGroup;
 
         public async Task<string> Execute(Message message, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -18,7 +19,7 @@ namespace TelegramBotService.States
             {
                 Message msg = await client.SendTextMessageAsync(message.From.Id, ".", replyMarkup: new ReplyKeyboardRemove());
                 await client.DeleteMessageAsync(message.From.Id, msg.MessageId);
-                return "StandartState";
+                return StateConstants.StandartState;
             }
 
             var group = await db.Groups.
@@ -37,7 +38,7 @@ namespace TelegramBotService.States
 
             user.TempGroupId = group.InviteCode;
 
-            return "EnterUserNameForMember";
+            return StateConstants.EnterUserNameForMember;
         }
     }
 }

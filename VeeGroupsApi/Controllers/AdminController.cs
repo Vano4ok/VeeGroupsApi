@@ -9,7 +9,8 @@ namespace VeeGroupsApi.Controllers
         {
             return base.Content("Service is working");
         }
-        public string Admin(){
+        public string Admin()
+        {
             return "admin page is in the development, or will be soon :]";
         }
     }

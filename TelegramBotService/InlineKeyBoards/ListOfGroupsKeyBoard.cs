@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class ListOfGroupsKeyBoard : IInlineKeyBoard
     {
-        public string Name => "ListOfGroups";
+        public string Name => InlineKeyBoardsConstants.ListOfGroups;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -28,7 +29,7 @@ namespace TelegramBotService.InlineKeyBoards
                 InlineKeyboardButton button = new InlineKeyboardButton()
                 {
                     Text = group.Name,
-                    CallbackData = "ListOfTopics_" + group.Id,
+                    CallbackData = InlineKeyBoardsConstants.ListOfTopics + "_" + group.Id,
                 };
                 InlineKeyboardButton[] row = new InlineKeyboardButton[1]
                 {
@@ -41,7 +42,7 @@ namespace TelegramBotService.InlineKeyBoards
             InlineKeyboardButton backButton = new InlineKeyboardButton()
             {
                 Text = "\U000021A9 Back",
-                CallbackData = "StartMenu"
+                CallbackData = InlineKeyBoardsConstants.StartMenu
             };
             InlineKeyboardButton[] lastRow = new InlineKeyboardButton[1]
             {
