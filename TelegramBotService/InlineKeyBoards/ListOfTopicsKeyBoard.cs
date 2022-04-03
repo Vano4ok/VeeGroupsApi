@@ -51,6 +51,16 @@ namespace TelegramBotService.InlineKeyBoards
 
             var isAdmin = await telegramAuthorizationManager.IsAdmin(callbackQuery.From.Id, groupId, db);
 
+
+
+            
+            List<InlineKeyboardButton> lastRow = new List<InlineKeyboardButton>{
+                new InlineKeyboardButton()
+                {
+                    Text = "\U000021A9 Back",
+                    CallbackData = InlineKeyBoardsConstants.ListOfGroups
+                }
+            };
             if (isAdmin)
             {
                 list.Add(
@@ -67,26 +77,15 @@ namespace TelegramBotService.InlineKeyBoards
                         CallbackData = InlineKeyBoardsConstants.SendMessage+ "_" + groupId
                     }
                 });
+                lastRow.Add(
+                    new InlineKeyboardButton()
+                    {
+                        Text = "\U00002699 Settings",
+                        CallbackData = InlineKeyBoardsConstants.GroupSettings + "_"+ groupId
+                    }
+                );
             }
-
-            InlineKeyboardButton backButton = new InlineKeyboardButton()
-            {
-                Text = "\U000021A9 Back",
-                CallbackData = InlineKeyBoardsConstants.ListOfGroups
-            };
-            InlineKeyboardButton[] lastRow = new InlineKeyboardButton[]
-            {
-                     backButton,
-                     ( isAdmin ?
-                        new InlineKeyboardButton()
-                        {
-                            Text = "\U00002699 Settings",
-                            CallbackData = InlineKeyBoardsConstants.GroupSettings + "_"+ groupId
-                        }
-                            :
-                    null)
-            };
-            list.Add(lastRow);
+            list.Add(lastRow.ToArray());
 
 
             InlineKeyboardMarkup inline = new InlineKeyboardMarkup(list);

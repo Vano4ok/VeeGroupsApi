@@ -55,24 +55,25 @@ namespace TelegramBotService.InlineKeyboardMethods
                     keyboardList.Add(new InlineKeyboardButton[] { key });
                 }
             }
-
-            keyboardList.Add(
-                new InlineKeyboardButton[]
+            List<InlineKeyboardButton> lastRow = new List<InlineKeyboardButton>{
+                new InlineKeyboardButton()
                 {
+                    Text = "\U000021A9 Back",
+                    CallbackData = InlineKeyBoardsConstants.ListOfTopics+ "_"+topic.GroupId
+                }
+            };
+            if (isAdmin)
+            {
+                lastRow.Add(
                     new InlineKeyboardButton()
                     {
-                        Text = "\U000021A9 Back",
-                        CallbackData = InlineKeyBoardsConstants.ListOfTopics+ "_"+topic.GroupId
-                    },
-                    ( isAdmin ?
-                        new InlineKeyboardButton()
-                        {
-                            Text = "\U00002699 Settings",
-                            CallbackData = InlineKeyBoardsConstants.TopicSettings+ "_"+ topic.Id
-                        }
-                            :
-                    null)
-                });
+                        Text = "\U00002699 Settings",
+                        CallbackData = InlineKeyBoardsConstants.TopicSettings+ "_"+ topic.Id
+                    }
+                );
+            }
+
+            keyboardList.Add(lastRow.ToArray());
 
         }
 

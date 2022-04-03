@@ -21,7 +21,7 @@ COPY VeeGroupsApi/nlog.config.xml .
 # depending on what you are choosing above uncomment and comment these thins))
 
 # COPY --from=build-env /app/VeeGroupsApi/out .
-COPY VeeGroupsApi/bin/Release/net5.0 .
+COPY VeeGroupsApi/bin/Release/net5.0/publish .
 
 
 EXPOSE 80

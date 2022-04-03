@@ -66,13 +66,8 @@ namespace TelegramBotService.States
                     {
                         new InlineKeyboardButton()
                         {
-                            Text = "\U0001FA84 New",
+                            Text = "\U0001FA84 New topic",
                             CallbackData = InlineKeyBoardsConstants.CreateTopic+ "_" + group.Id.ToString()
-                        },
-                        new InlineKeyboardButton()
-                        {
-                            Text = "\U0001F4AC Notify",
-                            CallbackData = InlineKeyBoardsConstants.SendMessage+ "_" + group.Id.ToString()
                         }
                     },
                 
