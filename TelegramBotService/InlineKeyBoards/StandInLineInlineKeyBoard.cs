@@ -11,7 +11,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class StandInLineInlineKeyBoard : TopicKeyBoard, IInlineKeyBoard
     {
-        public new string Name => InlineKeyBoardsConstants.ShowInviteCode;
+        public new string Name => InlineKeyBoardsConstants.StandInLine;
 
         public override async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {

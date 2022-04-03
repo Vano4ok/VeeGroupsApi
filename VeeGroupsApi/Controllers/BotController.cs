@@ -96,32 +96,8 @@ namespace VeeGroupsApi.Controllers
                 if (message != null)
                     if (message.Text == "/start")
                     {
-                        InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup(
-
-                            new InlineKeyboardButton[][] {
-                            new InlineKeyboardButton[]
-                            {
-                                new InlineKeyboardButton()
-                                {
-                                    Text = "\U0001F4C1 Your groups",
-                                    CallbackData = InlineKeyBoardsConstants.ListOfGroups
-                                }
-                            }, new InlineKeyboardButton[]
-                            {
-                                new InlineKeyboardButton()
-                                {
-                                    Text = "\U000027A1 Enter the group",
-                                    CallbackData = InlineKeyBoardsConstants.EnterGroup
-                                },
-                                new InlineKeyboardButton()
-                                {
-                                    Text = "\U0001FA84 Create a new group",
-                                    CallbackData = InlineKeyBoardsConstants.CreationGroup
-                                }
-                            }});
-
-                        await telegramBotClient.SendTextMessageAsync(message.Chat.Id, "Hello! I am VeeGroups Bot", replyMarkup: inlineKeyboard);
-
+                        var startMenuKeyboard = new TelegramBotService.InlineKeyBoards.StartMenuKeyBoard();
+                        await startMenuKeyboard.NewMessage(telegramBotClient, message.Chat.Id);
                         return Ok();
                     }
 

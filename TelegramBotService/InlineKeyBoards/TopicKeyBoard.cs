@@ -16,7 +16,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class TopicKeyBoard : IInlineKeyBoard
     {
-        public string Name => InlineKeyBoardsConstants.StartMenu;
+        public string Name => InlineKeyBoardsConstants.Topic;
 
         protected Topic topic;
         protected Guid topicId;

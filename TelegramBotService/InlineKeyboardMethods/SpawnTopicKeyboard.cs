@@ -21,7 +21,7 @@ namespace TelegramBotService.InlineKeyboardMethods
                     {
                         new InlineKeyboardButton()
                         {
-                            Text ="\U000027A1 Stand in line",
+                            Text ="\U000027A1 Stand in",
                             CallbackData =InlineKeyBoardsConstants.StandInLine+ "_"+ topic.Id
                         }
                     });
@@ -32,7 +32,7 @@ namespace TelegramBotService.InlineKeyboardMethods
 
                 var key = new InlineKeyboardButton()
                 {
-                    Text = "Get out of here",
+                    Text = "\U0001F9F3 Get out",
                     CallbackData = InlineKeyBoardsConstants.UnConfirm + "_" + topic.Id
                 };
 
@@ -56,17 +56,6 @@ namespace TelegramBotService.InlineKeyboardMethods
                 }
             }
 
-            if (isAdmin)
-                keyboardList.Add(
-                    new InlineKeyboardButton[]
-                    {
-                        new InlineKeyboardButton()
-                        {
-                            Text = "\U00002699 Settings",
-                            CallbackData = InlineKeyBoardsConstants.TopicSettings+ "_"+ topic.Id
-                        }
-                    });
-
             keyboardList.Add(
                 new InlineKeyboardButton[]
                 {
@@ -74,7 +63,15 @@ namespace TelegramBotService.InlineKeyboardMethods
                     {
                         Text = "\U000021A9 Back",
                         CallbackData = InlineKeyBoardsConstants.ListOfTopics+ "_"+topic.GroupId
-                    }
+                    },
+                    ( isAdmin ?
+                        new InlineKeyboardButton()
+                        {
+                            Text = "\U00002699 Settings",
+                            CallbackData = InlineKeyBoardsConstants.TopicSettings+ "_"+ topic.Id
+                        }
+                            :
+                    null)
                 });
 
         }

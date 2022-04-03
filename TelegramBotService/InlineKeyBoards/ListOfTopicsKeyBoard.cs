@@ -49,37 +49,24 @@ namespace TelegramBotService.InlineKeyBoards
                 list.Add(row);
             }
 
-            var isAdmin = telegramAuthorizationManager.IsAdmin(callbackQuery.From.Id, groupId, db);
+            var isAdmin = await telegramAuthorizationManager.IsAdmin(callbackQuery.From.Id, groupId, db);
 
-            if (await isAdmin)
+            if (isAdmin)
             {
-
-                InlineKeyboardButton[] keyboardButton = new InlineKeyboardButton[]
-               {
-                    new InlineKeyboardButton()
-                    {
-                        Text = "\U0001F4AC Send message",
-                        CallbackData = InlineKeyBoardsConstants.SendMessage+ "_" + groupId
-                    }
-               };
-
-                list.Add(keyboardButton);
-
-                InlineKeyboardButton[] keyboardButtons = new InlineKeyboardButton[]
+                list.Add(
+                    new InlineKeyboardButton[]
                 {
                     new InlineKeyboardButton()
                     {
-                        Text = "\U0001FA84 Create new topic",
+                        Text = "\U0001FA84 New",
                         CallbackData = InlineKeyBoardsConstants.CreateTopic+ "_" + groupId
                     },
                     new InlineKeyboardButton()
                     {
-                        Text = "\U00002699 Settings",
-                        CallbackData = InlineKeyBoardsConstants.GroupSettings + "_"+ groupId
+                        Text = "\U0001F4AC Notify",
+                        CallbackData = InlineKeyBoardsConstants.SendMessage+ "_" + groupId
                     }
-                };
-
-                list.Add(keyboardButtons);
+                });
             }
 
             InlineKeyboardButton backButton = new InlineKeyboardButton()
@@ -87,9 +74,17 @@ namespace TelegramBotService.InlineKeyBoards
                 Text = "\U000021A9 Back",
                 CallbackData = InlineKeyBoardsConstants.ListOfGroups
             };
-            InlineKeyboardButton[] lastRow = new InlineKeyboardButton[1]
+            InlineKeyboardButton[] lastRow = new InlineKeyboardButton[]
             {
-                     backButton
+                     backButton,
+                     ( isAdmin ?
+                        new InlineKeyboardButton()
+                        {
+                            Text = "\U00002699 Settings",
+                            CallbackData = InlineKeyBoardsConstants.GroupSettings + "_"+ groupId
+                        }
+                            :
+                    null)
             };
             list.Add(lastRow);
 

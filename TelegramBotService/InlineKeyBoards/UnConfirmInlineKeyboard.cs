@@ -21,9 +21,11 @@ namespace TelegramBotService.InlineKeyBoards
             var userko = await db.TelegramUserTopics
                 .FirstOrDefaultAsync(u => u.TelegramUserId.Equals(callbackQuery.From.Id) && u.TopicId.Equals(topicId));
 
-            db.TelegramUserTopics.Remove(userko);
-            await db.SaveChangesAsync();
-            await UpdateUsers();
+            if(userko != null ){
+                db.TelegramUserTopics.Remove(userko);
+                await db.SaveChangesAsync();
+                // await UpdateUsers();
+            }
 
             if (userko != null)
             {

@@ -66,32 +66,29 @@ namespace TelegramBotService.States
                     {
                         new InlineKeyboardButton()
                         {
-                             Text = "\U0001F4AC Send message",
-                             CallbackData = InlineKeyBoardsConstants.SendMessage+ "_" + group.Id
-                        }
-
-                    },
-                    new InlineKeyboardButton[]
-                    {
-                        new InlineKeyboardButton()
-                        {
-                            Text = "\U0001FA84 Create new topic",
+                            Text = "\U0001FA84 New",
                             CallbackData = InlineKeyBoardsConstants.CreateTopic+ "_" + group.Id.ToString()
                         },
-                    new InlineKeyboardButton()
+                        new InlineKeyboardButton()
                         {
-                            Text = "\U00002699 Settings",
-                            CallbackData = InlineKeyBoardsConstants.GroupSettings + "_"+ group.Id.ToString()
+                            Text = "\U0001F4AC Notify",
+                            CallbackData = InlineKeyBoardsConstants.SendMessage+ "_" + group.Id.ToString()
                         }
                     },
+                
                     new InlineKeyboardButton[]
                     {
                         new InlineKeyboardButton()
                         {
                             Text = "\U000021A9 Back",
-                            CallbackData = InlineKeyBoardsConstants.StartMenu
+                            CallbackData = InlineKeyBoardsConstants.ListOfGroups
+                        },
+                        new InlineKeyboardButton()
+                        {
+                            Text = "\U00002699 Settings",
+                            CallbackData = InlineKeyBoardsConstants.GroupSettings + "_"+ group.Id.ToString()
                         }
-                    }
+                    },
                 });
 
             await client.SendTextMessageAsync(message.From.Id, "Wellcome to " + group.Name + "! \nIt is invite code of your group:\n" + group.InviteCode, replyMarkup: inlineKeyboard);

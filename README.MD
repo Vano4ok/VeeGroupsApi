@@ -3,10 +3,11 @@
 
 ## TODO list:
 - [x] ability to get out of queue
-- [ ] skip person on queue
+- [ ] skip person in queue
 - [ ] delete person by admin
 - [ ] add delete admin of queue
 - [ ] additerator of queue and show who should go next??
+- [ ] ability to leave group
 
 ## How to run database from docker
 ```
@@ -16,5 +17,4 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<password>" \
    -d mcr.microsoft.com/mssql/server:2019-latest
 ```
 
-### Last updates:
-- added docker-compose file
+s

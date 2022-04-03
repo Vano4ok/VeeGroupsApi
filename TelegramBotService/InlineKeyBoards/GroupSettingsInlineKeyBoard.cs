@@ -12,7 +12,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class GroupSettingsInlineKeyBoard : IInlineKeyBoard
     {
-        public string Name => InlineKeyBoardsConstants.EnterGroup;
+        public string Name => InlineKeyBoardsConstants.GroupSettings;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
@@ -41,7 +41,7 @@ namespace TelegramBotService.InlineKeyBoards
                     },
                     new InlineKeyboardButton()
                     {
-                        Text = "\U0001F504 Refresh invite code",
+                        Text = "\U0001F504 New invite code",
                         CallbackData = InlineKeyBoardsConstants.RefreshInviteCode+ "_"+group.Id
                     }
                 },
@@ -49,13 +49,13 @@ namespace TelegramBotService.InlineKeyBoards
                 {
                     new InlineKeyboardButton()
                     {
-                        Text = "\U0001F9E8 Delete group",
-                        CallbackData = InlineKeyBoardsConstants.DeleteGroup+ "_"+group.Id
+                        Text = "\U000021A9 Back",
+                        CallbackData = InlineKeyBoardsConstants.ListOfTopics+ "_"+group.Id
                     },
                     new InlineKeyboardButton()
                     {
-                        Text = "\U000021A9 Back",
-                        CallbackData = InlineKeyBoardsConstants.ListOfTopics+ "_"+group.Id
+                        Text = "\U0001F9E8 Delete group",
+                        CallbackData = InlineKeyBoardsConstants.DeleteGroup+ "_"+group.Id
                     }
                 }});
 

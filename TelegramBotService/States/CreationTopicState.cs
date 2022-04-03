@@ -58,18 +58,10 @@ namespace TelegramBotService.States
                new InlineKeyboardButton[][] {
                     new InlineKeyboardButton[]
                     {
-                    new InlineKeyboardButton()
-                    {
-                        Text ="\U000027A1 Stand in line",
-                        CallbackData =InlineKeyBoardsConstants.StandInLine+ "_"+ topic.Id
-                    }
-                    },
-                    new InlineKeyboardButton[]
-                    {
-                         new InlineKeyboardButton()
+                        new InlineKeyboardButton()
                         {
-                            Text = "\U00002699 Settings",
-                            CallbackData = InlineKeyBoardsConstants.TopicSettings+ "_"+ topic.Id
+                            Text ="\U000027A1 Stand in",
+                            CallbackData =InlineKeyBoardsConstants.StandInLine+ "_"+ topic.Id
                         }
                     },
                     new InlineKeyboardButton[]
@@ -78,8 +70,12 @@ namespace TelegramBotService.States
                         {
                             Text = "\U000021A9 Back",
                             CallbackData = InlineKeyBoardsConstants.ListOfTopics+ "_"+user.TempGroupId
+                        },
+                        new InlineKeyboardButton()
+                        {
+                            Text = "\U00002699 Settings",
+                            CallbackData = InlineKeyBoardsConstants.TopicSettings+ "_"+ topic.Id
                         }
-
                     }
                });
 
@@ -88,7 +84,7 @@ namespace TelegramBotService.States
 
             await client.SendTextMessageAsync(message.From.Id, "Welcome to " + topic.Name, replyMarkup: inlineKeyboard);
 
-            return StateConstants.StandartState; ;
+            return StateConstants.StandartState;
         }
     }
 }

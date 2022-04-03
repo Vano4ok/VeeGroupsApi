@@ -12,7 +12,7 @@ namespace TelegramBotService.InlineKeyBoards
 {
     public class TopicSettingsInlineKeyBoard : IInlineKeyBoard
     {
-        public string Name => InlineKeyBoardsConstants.StartMenu;
+        public string Name => InlineKeyBoardsConstants.TopicSettings;
 
         public async Task Execute(CallbackQuery callbackQuery, ITelegramBotClient client, DataBaseContext db, ITelegramAuthorizationManager telegramAuthorizationManager)
         {
